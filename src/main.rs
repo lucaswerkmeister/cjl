@@ -27,19 +27,19 @@ fn main() -> io::Result<()> {
             Err(e) => return Err(e),
         }
         if let Err(e) = serde_json::from_str::<Value>(&line) {
-            eprintln!("cjl: bad line: {}", e);
-            eprintln!("cjl: the previous (good) lines were:");
+            println!("cjl: bad line: {}", e);
+            println!("cjl: the previous (good) lines were:");
             while let Some(previous_line) = previous_lines.dequeue() {
-                eprintln!("{}", strip_crlf(previous_line));
+                println!("{}", strip_crlf(previous_line));
             }
-            eprintln!("cjl: the bad line is:");
-            eprintln!("{}", strip_crlf(line));
+            println!("cjl: the bad line is:");
+            println!("{}", strip_crlf(line));
             if atty::isnt(Stream::Stdin) {
                 let mut next_line = String::new();
                 if let Ok(n) = input.read_line(&mut next_line) {
                     if n > 0 {
-                        eprintln!("cjl: the next line is:");
-                        eprintln!("{}", strip_crlf(next_line));
+                        println!("cjl: the next line is:");
+                        println!("{}", strip_crlf(next_line));
                     }
                 }
             }
