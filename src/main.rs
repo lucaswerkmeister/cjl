@@ -25,15 +25,14 @@ fn main() -> io::Result<()> {
             Ok(_) => (),
             Err(e) => return Err(e),
         }
-        line = strip_crlf(line);
         if let Err(e) = serde_json::from_str::<Value>(&line) {
             eprintln!("cjl: bad line: {}", e);
             eprintln!("cjl: the previous (good) lines were:");
             while let Some(previous_line) = previous_lines.dequeue() {
-                eprintln!("{}", previous_line);
+                eprintln!("{}", strip_crlf(previous_line));
             }
             eprintln!("cjl: the bad line is:");
-            eprintln!("{}", line);
+            eprintln!("{}", strip_crlf(line));
             let mut next_line = String::new();
             if let Ok(n) = input.read_line(&mut next_line) {
                 if n > 0 {
