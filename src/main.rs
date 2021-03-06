@@ -1,3 +1,4 @@
+use atty::Stream;
 use ringbuffer::{typenum, GenericRingBuffer, RingBuffer};
 use serde_json::{self, Value};
 use std::io::{self, prelude::*};
@@ -33,11 +34,13 @@ fn main() -> io::Result<()> {
             }
             eprintln!("cjl: the bad line is:");
             eprintln!("{}", strip_crlf(line));
-            let mut next_line = String::new();
-            if let Ok(n) = input.read_line(&mut next_line) {
-                if n > 0 {
-                    eprintln!("cjl: the next line is:");
-                    eprintln!("{}", strip_crlf(next_line));
+            if atty::isnt(Stream::Stdin) {
+                let mut next_line = String::new();
+                if let Ok(n) = input.read_line(&mut next_line) {
+                    if n > 0 {
+                        eprintln!("cjl: the next line is:");
+                        eprintln!("{}", strip_crlf(next_line));
+                    }
                 }
             }
             exit(1);
